@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Request } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { UserService } from './user.service';
@@ -35,7 +35,9 @@ export class AuthService {
             access_token
         }
     }
-
+    getCurrentUser(@Request() req){
+        console.log(req.currentUser)
+    } 
     async login(requestsBody : LoginUserDto){
         const userByEmail = await this.userService.findByEmail(requestsBody.email);
         if(!userByEmail) {
