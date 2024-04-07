@@ -5,9 +5,9 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { AuthService } from './auth.service';
 import { LoginUserDto } from './dto/login-user.dto';
-import { AuthGuard } from './guards/auth.guard';
+import { AuthGuard } from '../guards/auth.guard';
 import { currentUser } from './decorator/user.decorator';
-import { RolesGuard } from './guards/roles.guard';
+import { RolesGuard } from '../guards/roles.guard';
 import { User } from './entities/user.entity';
 
 @UseInterceptors(ClassSerializerInterceptor)

@@ -1,4 +1,4 @@
-import { UserService } from './../user.service';
+import { UserService } from '../user/user.service';
 /* eslint-disable prettier/prettier */
 import { BadRequestException, CanActivate, ExecutionContext, ForbiddenException, Injectable } from "@nestjs/common";
 import { JwtService } from '@nestjs/jwt';

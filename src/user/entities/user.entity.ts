@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { Exclude } from "class-transformer";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Post } from "src/post/entities/post.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 export enum ROLES {
     ADMIN = 'ADMIN',
     USER = 'USER',
@@ -20,4 +21,7 @@ export class User {
     @Exclude()
     @Column({default: ROLES.USER})
     role:ROLES;
+
+    @OneToMany(() => Post,(post) => post.user) 
+    posts : Post[];
 } 
