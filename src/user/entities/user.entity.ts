@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { Exclude } from "class-transformer";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-enum ROLES {
+export enum ROLES {
     ADMIN = 'ADMIN',
     USER = 'USER',
 }

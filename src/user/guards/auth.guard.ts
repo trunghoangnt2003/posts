@@ -1,7 +1,6 @@
 import { UserService } from './../user.service';
 /* eslint-disable prettier/prettier */
 import { BadRequestException, CanActivate, ExecutionContext, ForbiddenException, Injectable } from "@nestjs/common";
-import { Observable } from "rxjs";
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
@@ -12,7 +11,7 @@ export class AuthGuard implements CanActivate{
         try {
             // 1)  get token jwt from headers
             const token = request.headers.authorization.split(' ')[1];
-            console.log(token);
+            console.log("Auth: ",token);
 
             // 2) jwtVerify validate token
             if(!token){
@@ -22,9 +21,9 @@ export class AuthGuard implements CanActivate{
                 secret: process.env.JWT_SECRET,
             });
             // 3) find user in database on jwtVerify
-            console.log(payload);
+            console.log("Auth: ",payload);
             const user = await this.userService.findByEmail(payload.email);
-            console.log(user);
+            console.log("Auth: ",user);
             if(!user){
                 throw new BadRequestException('User not found');
             }

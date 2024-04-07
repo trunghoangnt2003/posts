@@ -1,11 +1,13 @@
 /* eslint-disable prettier/prettier */
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RegisterUserDto } from './dto/register-user.dto';
+import { Permissions } from './helper/Permission.helper';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -34,12 +36,20 @@ export class UserService {
   findByEmail(email: string) {
     return this.userRepository.findOneBy({email});
   }
-  async update(id: number, updateUserDto: UpdateUserDto) {
+  async update(id: number, updateUserDto: UpdateUserDto , currentUser: User) {
+      if(updateUserDto.role){
+        throw new BadRequestException('dont update role user');
+      }
+
       const user = await this.findOne(id);
       if(!user){
         throw new Error('User not found');
       }
-  
+      Permissions.check(id,currentUser);
+      // hash password
+      const saltOrRounds = 10;
+      const hashPassword = await bcrypt.hash(updateUserDto.password,saltOrRounds);
+      updateUserDto.password = hashPassword;
       return this.userRepository.update(id, updateUserDto);
   }
 
