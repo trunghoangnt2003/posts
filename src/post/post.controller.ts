@@ -9,6 +9,7 @@ import {
   UseGuards,
   UseInterceptors,
   ClassSerializerInterceptor,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -16,6 +17,7 @@ import { UpdatePostDto } from './dto/update-post.dto';
 import { currentUser } from 'src/user/decorator/user.decorator';
 import { User } from 'src/user/entities/user.entity';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { RolesGuard } from 'src/guards/roles.guard';
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('post')
 export class PostController {
@@ -32,17 +34,21 @@ export class PostController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     return this.postService.findOne(+id);
   }
-
+  @UseGuards(AuthGuard)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
-    return this.postService.update(+id, updatePostDto);
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updatePostDto: UpdatePostDto,
+    @currentUser() user: User,
+  ) { 
+    return this.postService.update(+id, updatePostDto, user);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseIntPipe) id: number) {
     return this.postService.remove(+id);
   }
 }
