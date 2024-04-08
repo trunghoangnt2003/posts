@@ -56,4 +56,12 @@ export class UserService {
   remove(id: number) {
     return `This action removes a #${id} user`;
   }
+  async findByIdPost(id:number){
+    const user = await this.userRepository
+      .createQueryBuilder('user')
+      .innerJoin('user.posts', 'post')
+      .where('post.id = :idPost', { idPost: id })
+      .getOne();
+      return user;
+  }
 }
