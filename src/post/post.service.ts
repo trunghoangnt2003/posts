@@ -21,7 +21,7 @@ export class PostService {
   }
 
   findAll() {
-    return this.postRepository.find();
+    return this.postRepository.find({ relations: ['user'] });
   }
 
   findOne(id: number) {
@@ -30,11 +30,19 @@ export class PostService {
 
   async update(id: number, updatePostDto: UpdatePostDto, user: User) {
     const post = await this.findOne(id);
+    console.log('post item: ', post.User_Id);
+    debugger;
     if (!post) {
       throw new NotFoundException('Post not found');
     }
-    const userInPost = await this.userService.findByIdPost(id);
-    Permissions.check(userInPost.id, user);
+
+    // const postDB = await this.postRepository
+    //   .createQueryBuilder('post')
+    //   .innerJoin('post.user', 'user')
+    //   .where('post.id = :idPost', { idPost: id })
+    //   .getOne();
+    //const userInPost = await this.userService.findByIdPost(id);
+    Permissions.check(post.User_Id, user);
     return this.postRepository.update(id, updatePostDto);
   }
 

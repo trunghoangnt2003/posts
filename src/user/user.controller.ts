@@ -22,17 +22,17 @@ export class UserController {
     console.log("Get all users");
     return this.userService.findAll();
   }
-  @UseGuards(AuthGuard)
+  //@UseGuards(AuthGuard)
   @Get('currentUser')
   getCurrentUser(@currentUser() user) {
     return user;;
-  }
+  } 
   @Get(':id')
   findOne(@Param('id',ParseIntPipe) id: number) {
     return this.userService.findOne(+id);
   }
   @UseGuards(new RolesGuard(["ADMIN","USER"]))
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard) 
   @Patch(':id')
   update(@Param('id',ParseIntPipe) id: number , @Body() updateUserDto: UpdateUserDto, @currentUser() user: User) {
     return this.userService.update(+id, updateUserDto,user);
